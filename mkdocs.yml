@@ -1,0 +1,121 @@
+site_name: Sunucu Kurulum Rehberi
+theme:
+  name: material
+  logo: assets/logo.svg
+  favicon: assets/favicon.svg
+  language: tr
+  palette:
+    # Light Mode
+    - scheme: default
+      primary: white
+      accent: sky
+      toggle:
+        icon: material/brightness-7
+        name: Karanlık moda geç
+    # Dark Mode
+    - scheme: slate
+      primary: slate
+      accent: sky
+      toggle:
+        icon: material/brightness-4
+        name: Aydınlık moda geç
+  font:
+    text: Space Grotesk
+    code: JetBrains Mono
+  features:
+    - navigation.instant
+    - navigation.tracking
+    - navigation.tabs
+    - navigation.tabs.sticky
+    - navigation.sections
+    - navigation.expand
+    - navigation.top
+    - navigation.indexes
+    - navigation.path
+    - search.suggest
+    - search.highlight
+    - content.code.copy
+
+extra_css:
+  - stylesheets/extra.css
+
+extra_javascript:
+  - javascripts/extra.js
+
+markdown_extensions:
+  - pymdownx.highlight:
+      anchor_linenums: true
+  - pymdownx.superfences
+  - pymdownx.tabbed:
+      alternate_style: true
+  - admonition
+  - pymdownx.details
+  - attr_list
+  - md_in_html
+
+nav:
+  - Ana Sayfa: index.md
+  - Mimari:
+      - Genel: architecture/index.md
+      - Genel Bakis: architecture/overview.md
+      - Ag Tasarimi: architecture/network.md
+      - Operasyon: architecture/operations.md
+  - Kurulum:
+      - Genel: how-to/index.md
+      - Temel OS: how-to/base-os.md
+      - Swap Bellek: how-to/swap.md
+      - Nginx: how-to/nginx.md
+      - Reverse Proxy: how-to/reverse-proxy.md
+      - TLS: how-to/tls.md
+      - Systemd Servis: how-to/systemd-service.md
+      - Logrotate: how-to/logrotate.md
+      - Monitoring: how-to/monitoring.md
+      - Monitoring Stack: how-to/monitoring-stack.md
+      - Yedekleme: how-to/backups.md
+      - Paket Yonetimi: how-to/package-management.md
+      - Kullanici Yonetimi: how-to/user-management.md
+      - Ag/Port Kontrolleri: how-to/port-checks.md
+  - Guvenlik:
+      - Genel: security/index.md
+      - SSH Hardening: security/ssh.md
+      - Firewall: security/firewall.md
+      - Fail2ban: security/fail2ban.md
+      - SSHGuard: security/sshguard.md
+      - CrowdSec: security/crowdsec.md
+      - UFW Rate Limit: security/ufw-rate-limit.md
+      - Otomatik Guncellemeler: security/updates.md
+      - Lynis: security/lynis.md
+  - Runbooks:
+      - Genel: runbooks/index.md
+      - Olay Yonetimi: runbooks/incident-response.md
+      - Servis Kesintisi: runbooks/service-down.md
+      - Deploy Geri Alma: runbooks/deploy-rollback.md
+      - Disk Dolu: runbooks/disk-full.md
+      - Inode Dolu: runbooks/inode-full.md
+      - Disk IO: runbooks/disk-io.md
+      - OOM Kill / Memory Leak: runbooks/oom-kill.md
+      - CPU Spike: runbooks/cpu-spike.md
+      - Veritabani Down: runbooks/db-down.md
+      - TLS Yenileme: runbooks/tls-renewal.md
+      - Sertifika Suresi Doldu: runbooks/cert-expired.md
+      - DNS Sorunlari: runbooks/dns-issues.md
+      - Network Latency: runbooks/network-latency.md
+      - LB Healthcheck: runbooks/lb-healthcheck.md
+      - DDoS / Rate Limit: runbooks/ddos-rate-limit.md
+      - Replication Lag: runbooks/replication-lag.md
+      - Backup Restore Fail: runbooks/backup-restore-fail.md
+      - Config Deploy Hatasi: runbooks/config-deploy-fail.md
+      - SSH Lockout: runbooks/ssh-lockout.md
+  - Kontrol Listeleri:
+      - Ilk Kurulum: checklists/server-first-setup.md
+      - Uretime Hazirlik: checklists/prod-ready.md
+  - Scriptler:
+      - Genel: scripts/index.md
+      - Otomasyon: scripts/automation.md
+      - Standartlar: scripts/conventions.md
+      - Calistirma: scripts/execution.md
+      - Guvenlik: scripts/safety.md
+  - Troubleshooting:
+      - Genel: troubleshooting/index.md
+      - Hizli Teshis: troubleshooting/cheat-sheet.md
+      - Yaygin Sorunlar: troubleshooting/common-issues.md
