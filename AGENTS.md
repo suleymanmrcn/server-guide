@@ -40,7 +40,10 @@
 - `security/`: **[HARDENING]** Defensive guides.
   - `docker-gateway.md`: **[CRITICAL]** Networking model to prevent UFW bypass.
 - `runbooks/`: **[INCIDENT]** "Break Glass" guides for emergencies.
-- `recipes/`: **[TEMPLATES]** Golden images for Docker (React, .NET, PG).
+- `recipes/`: **[TEMPLATES]** Golden images for Docker containers (React, .NET, PG).
+- `file-templates/`: **[CONFIG]** Configuration templates (docker-compose, nginx) converted to Markdown.
+- `architecture/`: **[DESIGN]** High-level diagrams and overview.
+- `reference/`: **[CHEAT-SHEETS]** Command references and quick lookups.
 
 ---
 
@@ -68,6 +71,6 @@
 
 ## 5. 🧠 MEMORY & CONTEXT (Current State)
 
-- **Active Sprint:** "Automation & Operations Overhaul" complete.
+- **Active Sprint:** "Documentation Completeness & Refinement" complete.
 - **Key Feature:** "Licensed CLI" distribution model accepted for SaaS.
-- **Latest Upgrade:** GitHub Actions guide added with "Pre-Flight Checks".
+- **Latest Upgrade:** All missing documentation (Templates, Recipes, Architecture) created. Templates moved to `file-templates`.
