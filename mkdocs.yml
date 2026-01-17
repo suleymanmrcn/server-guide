@@ -99,10 +99,10 @@ nav:
 
       - Otomatik Guncellemeler: security/updates.md
       - Kernel Hardening (Sysctl): security/sysctl.md
+      - Kernel Sozlugu (Detay): security/sysctl-glossary.md
       - Servis Temizligi: security/services.md
       - Servis Sozlugu: security/service-glossary.md
       - Malware & Rootkit: security/malware.md
-      - Hacker Tuzaklama (Tarpit): security/tarpit.md
       - Hacker Tuzaklama (Tarpit): security/tarpit.md
       - Lynis: security/lynis.md
   - Referans:

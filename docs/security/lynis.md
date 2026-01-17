@@ -50,8 +50,24 @@ Lynis'i daha efektif kullanmak için şu parametreleri bilmenizde fayda var:
 
 ### ⚠️ Old version / Update available
 
-**Anlamı:** Lynis'in kendi sürümü eski olabilir (`apt` depolarındaki sürüm bazen resmi siteden geriden gelir).
-**Çözüm:** Güvenlik açığı değildir, sadece tool'un güncel olmadığını söyler. Önemli değildir.
+**Anlamı:** Lynis'in kendi sürümü eski olabilir. Ubuntu depolarındaki (`apt install lynis`) sürüm, resmi siteden birkaç ay/yıl geriden gelebilir.
+**Çözüm:** Bu bir güvenlik açığı değildir, sadece yeni özelliklerin eksik olduğunu gösterir.
+
+**Nasıl Güncellenir? (Opsiyonel)**
+Eğer bu uyarıyı kaldırmak ve en son sürümü kullanmak isterseniz, resmi deposunu ekleyebilirsiniz:
+
+```bash
+# 1. Eski sürümü sil
+sudo apt remove lynis -y
+
+# 2. Resmi CISOfy deposunu ekle
+wget -O - https://packages.cisofy.com/keys/cisofy-software-public.key | sudo apt-key add -
+echo "deb https://packages.cisofy.com/community/lynis/deb/ stable main" | sudo tee /etc/apt/sources.list.d/cisofy-lynis.list
+
+# 3. Güncel sürümü kur
+sudo apt update
+sudo apt install lynis
+```
 
 ### ⚠️ Firewall not active
 
