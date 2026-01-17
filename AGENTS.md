@@ -1,136 +1,73 @@
-# Server Setup Handbook Agent Guide
+# AGENT DIRECTIVE: Server Setup Handbook
 
-This repository contains a production-ready server setup handbook built with MkDocs.
-Follow the structure below when adding or expanding content.
+> **SYSTEM PROMPT:** This file is the authoritative source of truth for the project structure, technical constraints, and operating procedures. Any AI agent working on this repository MUST consume this context first.
 
-## Scope
-- Linux server setup (Ubuntu/Debian baseline).
-- Security, networking, deployment basics, monitoring, and maintenance.
-- Keep instructions provider-agnostic unless a step requires a specific tool.
+## 1. 🎯 MISSION CONTEXT
 
-## Writing rules
-- Default language: Turkish.
-- Prefer short, actionable steps with commands.
-- Mark assumptions and requirements explicitly.
-- Avoid long theory blocks; link or summarize when needed.
-- Keep headings consistent with the section map below.
+**Goal:** Maintain a "Senior SRE Level" documentation and automation suite for Linux Server (Ubuntu/Debian) provisioning.
+**Philosophy:** "Plug-and-Play", "Secure by Default", "No Fluff (Direct & Actionable)".
+**Target User:** DevOps Engineers, System Admins, and Developers deployment production servers.
+**Primary Output:** A high-quality MkDocs static site + A library of Shell Scripts.
 
-## Section map
-- docs/index.md
-  - Amac, hedef kitle, kapsam, nasil kullanilir
-- docs/architecture/index.md
-  - Sistem tasarimi genel gorunum
-- docs/architecture/overview.md
-  - Mimari katmanlar ve bagimliliklar
-- docs/architecture/network.md
-  - Ag tasarimi ve erisim matrisi
-- docs/architecture/operations.md
-  - Operasyonel mimari ve gozlenebilirlik
-- docs/how-to/index.md
-  - Kurulum rehberleri genel giris
-- docs/how-to/base-os.md
-  - Temel OS kurulumu ve ilk ayarlar
-- docs/how-to/nginx.md
-  - Nginx kurulumu ve servis dogrulama
-- docs/how-to/tls.md
-  - TLS sertifikasi kurulumu
-- docs/how-to/monitoring.md
-  - Izleme ve alarm kurulumlari
-- docs/how-to/backups.md
-  - Yedekleme kurulumu
-- docs/how-to/reverse-proxy.md
-  - Reverse proxy konfigurasyonu
-- docs/how-to/systemd-service.md
-  - Systemd servis tanimi
-- docs/how-to/logrotate.md
-  - Log rotasyon kurallari
-- docs/how-to/monitoring-stack.md
-  - Monitoring stack plani
-- docs/how-to/port-checks.md
-  - Ag ve port kontrolleri
-- docs/security/index.md
-  - Hardening genel giris
-- docs/security/ssh.md
-  - SSH hardening
-- docs/security/firewall.md
-  - Firewall kurallari
-- docs/security/fail2ban.md
-  - Brute force korumasi
-- docs/security/sshguard.md
-  - Fail2ban alternatifi
-- docs/security/crowdsec.md
-  - Fail2ban alternatifi
-- docs/security/ufw-rate-limit.md
-  - UFW rate limit alternatifi
-- docs/security/lynis.md
-  - Guvenlik denetimi
-- docs/security/updates.md
-  - Otomatik guvenlik guncellemeleri
-- docs/runbooks/index.md
-  - Prod mudahale rehberleri genel giris
-- docs/runbooks/incident-response.md
-  - Olay yonetimi adimlari
-- docs/runbooks/deploy-rollback.md
-  - Deploy geri alma adimlari
-- docs/runbooks/disk-full.md
-  - Disk dolu mudahalesi
-- docs/runbooks/service-down.md
-  - Servis kesintisi mudahalesi
-- docs/runbooks/db-down.md
-  - Veritabani down mudahalesi
-- docs/runbooks/cpu-spike.md
-  - CPU spike mudahalesi
-- docs/runbooks/tls-renewal.md
-  - TLS yenileme sorunu
-- docs/runbooks/disk-io.md
-  - Disk IO krizi
-- docs/runbooks/oom-kill.md
-  - OOM kill / memory leak
-- docs/runbooks/inode-full.md
-  - Inode dolu mudahalesi
-- docs/runbooks/dns-issues.md
-  - DNS sorunlari
-- docs/runbooks/network-latency.md
-  - Network latency spike
-- docs/runbooks/lb-healthcheck.md
-  - Load balancer healthcheck fail
-- docs/runbooks/ddos-rate-limit.md
-  - DDoS / rate limit
-- docs/runbooks/cert-expired.md
-  - Sertifika suresi doldu
-- docs/runbooks/replication-lag.md
-  - Replication lag
-- docs/runbooks/backup-restore-fail.md
-  - Backup restore basarisiz
-- docs/runbooks/config-deploy-fail.md
-  - Config deploy hatasi
-- docs/runbooks/ssh-lockout.md
-  - SSH erisim kesildi
-- docs/scripts/index.md
-  - Script repo aciklamalari
-- docs/scripts/conventions.md
-  - Script standartlari ve dokumantasyon
-- docs/scripts/execution.md
-  - Script calistirma rehberi
-- docs/scripts/safety.md
-  - Script guvenligi
-- docs/checklists/server-first-setup.md
-  - Ilk kurulum kontrol listesi
-- docs/checklists/prod-ready.md
-  - Production readiness kontrol listesi
-- docs/troubleshooting/index.md
-  - Troubleshooting genel giris
-- docs/troubleshooting/common-issues.md
-  - Yaygin sorunlar
+---
 
-## Expansion plan (parcalar)
-- Parca 1: Runbooks ayrintilari (incident, deploy rollback, disk dolu, service down)
-- Parca 2: How-to ayrintilari (nginx, tls, monitoring, backups)
-- Parca 3: Security ayrintilari (fail2ban, ssh, ufw, updates)
-- Parca 4: Checklists ayrintilari (server-first-setup, prod-ready)
-- Parca 5: Architecture + Scripts derinlestirme
+## 2. 🏗️ ARCHITECTURE & TECH STACK
 
-## Content checklist
-- Her bolumde amac + adimlar + dogrulama yer almali.
-- Komutlar icin acik kod bloklari kullan.
-- Riskli adimlar icin uyarı/admonition ekle.
+| Component                | Technology              | Role / Constraint                                                 |
+| :----------------------- | :---------------------- | :---------------------------------------------------------------- |
+| **Documentation Engine** | MkDocs (Material Theme) | Python-based. Configured in `mkdocs.yml`.                         |
+| **Automation Engine**    | Bash Scripts            | Native, Zero-Dependency. Location: `docs/scripts/library`.        |
+| **CI/CD Pipeline**       | GitHub Actions          | Defined in `docs/scripts/automation.md` (template).               |
+| **Containerization**     | Docker + Compose        | Standard for recipes (`docs/recipes`).                            |
+| **SaaS/Product Spec**    | Commercial Plan         | Internal only. Located in `engine-readme.md` (Excluded from git). |
+
+---
+
+## 3. �️ KNOWLEDGE GRAPH (File Map)
+
+### Core Configuration
+
+- `mkdocs.yml`: **[CRITICAL]** The central navigation map. Every new markdown file MUST be linked here.
+- `.gitignore`: Controls build artifacts and internal product specs.
+
+### Functional Directories (`docs/`)
+
+- `checklists/`: **[PROTOCOL]** Human-verified procedures. Not just "Todo" lists, but "Verification" matrices (Go/No-Go).
+  - `verify_step`: Every item must have a cli command to verify status.
+- `scripts/library/`: **[EXECUTABLE]** Production-ready code.
+  - `bootstrap.md`: The "Universal Init" script.
+  - `maintenance.md`: Self-cleaning logic.
+- `security/`: **[HARDENING]** Defensive guides.
+  - `docker-gateway.md`: **[CRITICAL]** Networking model to prevent UFW bypass.
+- `runbooks/`: **[INCIDENT]** "Break Glass" guides for emergencies.
+- `recipes/`: **[TEMPLATES]** Golden images for Docker (React, .NET, PG).
+
+---
+
+## 4. ⚙️ STANDARD OPERATING PROCEDURES (SOP)
+
+### SOP-001: Adding a New Guide
+
+1.  Create the file in the appropriate subdirectory (e.g., `docs/how-to/new-topic.md`).
+2.  **IMMEDIATELY** add the link to `mkdocs.yml` navigation.
+3.  Ensure the guide includes "Verification" steps (how to check if it worked).
+
+### SOP-002: Updating Scripts
+
+1.  Edit the markdown file (e.g., `docs/scripts/library/bootstrap.md`).
+2.  Ensure the code block is valid Bash.
+3.  Check for **Idempotency** (script should run multiple times without error).
+4.  Add a `log` entry (What changed?) in the file header.
+
+### SOP-003: Handling Internal Specs
+
+1.  Spec file `engine-readme.md` contains the SaaS business logic.
+2.  This file is **INTERNAL**. Do not expose its contents in the public `walkthrough.md` or other user-facing docs unless explicitly requested.
+
+---
+
+## 5. 🧠 MEMORY & CONTEXT (Current State)
+
+- **Active Sprint:** "Automation & Operations Overhaul" complete.
+- **Key Feature:** "Licensed CLI" distribution model accepted for SaaS.
+- **Latest Upgrade:** GitHub Actions guide added with "Pre-Flight Checks".

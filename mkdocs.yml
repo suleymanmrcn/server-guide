@@ -111,6 +111,7 @@ nav:
               - Dosya Islemleri: reference/commands/file.md
               - Disk & Kaynak: reference/commands/disk.md
               - Ag & Port: reference/commands/network.md
+              - Docker Komutlari: reference/commands/docker.md
               - Sistem & Servis: reference/commands/system.md
   - Guvenlik:
       - Genel: security/index.md
@@ -140,7 +141,16 @@ nav:
       - .NET Core Hardening: recipes/dotnet.md
       - React + Nginx: recipes/react.md
       - PostgreSQL Tuning: recipes/postgres.md
+      - MySQL / MariaDB: recipes/mysql.md
+      - Redis Cache: recipes/redis.md
+      - Traefik Proxy: recipes/traefik.md
       - Nginx Proxy Security: recipes/nginx.md
+
+  - Sablonlar (Templates):
+      - Docker Compose: file-templates/docker-compose.md
+      - Nginx Config: file-templates/nginx.md
+      - Env Example: file-templates/env-example.md
+      - Systemd Service: file-templates/systemd.md
 
   - Kontrol Listeleri:
       - Ilk Kurulum: checklists/server-first-setup.md
@@ -157,6 +167,12 @@ nav:
           - Haftalik Bakim (Cleaner): scripts/library/maintenance.md
           - Veritabani Yedekleme: scripts/library/backup.md
           - Guvenlik Denetimi (Audit): scripts/library/audit.md
+          - Saglik Kontrolu (Health Check): scripts/library/health-check.md
+          - DB Restore (Geri Donus): scripts/library/restore.md
+
+  - Mimari & Tasarim:
+      - Genel Bakis (Diagrams): architecture/overview.md
+
   - Troubleshooting:
       - Metodoloji (USE/RED): troubleshooting/index.md
       - Hizli Teshis (Cheat Sheet): troubleshooting/cheat-sheet.md
