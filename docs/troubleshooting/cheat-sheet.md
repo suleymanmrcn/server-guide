@@ -1,61 +1,52 @@
-# Hızlı Teşhis (Cheat Sheet)
+# Advanced Cheat Sheet (Senior SRE) 🛠️
 
-Sunucu yavaşladığında veya çöktüğünde paniklemeden kullanabileceğiniz komutlar rehberi.
+`top` komutundan fazlasına ihtiyacınız olduğunda.
 
-## 🚨 Yüksek Yük (CPU/RAM)
+## 🧠 CPU & Process Forensics
 
-Sunucu çok yavaşsa:
+| Senaryo                 | Senior Komut                               | Açıklama                                                                     |
+| :---------------------- | :----------------------------------------- | :--------------------------------------------------------------------------- |
+| **Process ne yapıyor?** | `strace -p <PID> -f -e trace=file,network` | Programın kernel ile konuşmasını izle. Dosya açıyor mu? Ağ isteği atıyor mu? |
+| **Core dağılımı**       | `mpstat -P ALL 1`                          | Tek bir çekirdek mi %100 yoksa hepsi mi dengeli?                             |
+| **Process ağacı**       | `ps fax`                                   | Hiyerarşik process görünümü (Zombie'nin babasını bulmak için).               |
+| **IO Bekleyenler**      | `vmstat 1`                                 | `b` (blocked) sütunu yüksekse CPU değil, Disk sorunu vardır.                 |
 
-| Komut                | Açıklama                                              |
-| :------------------- | :---------------------------------------------------- | ------------------------------------------------------------------ |
-| `htop`               | CPU ve RAM kullanımını renkli ve interaktif gösterir. |
-| `uptime`             | Load average değerlerini gösterir (1, 5, 15 dk).      |
-| `dmesg               | tail`                                                 | Kernel hatalarını (OOM Kill, disk hatası) son satırlarda gösterir. |
-| `free -h`            | RAM kullanımını insan okunabilir formatta gösterir.   |
-| `ps aux --sort=-%mem | head -10`                                             | En çok RAM yiyen 10 işlemi listeler.                               |
+## 💾 Memory Forensics
 
-## 🌐 Ağ ve Bağlantı (Network)
+| Senaryo            | Senior Komut                                | Açıklama                                                                                          |
+| :----------------- | :------------------------------------------ | :------------------------------------------------------------------------------------------------ | ------------------------------ |
+| **Kim RAM yiyor?** | `ps -eo pid,ppid,cmd,%mem,%cpu --sort=-%mem | head -10`                                                                                         | En çok RAM tüketenleri sırala. |
+| **Swap kullanımı** | `vmstat 1`                                  | `si` (swap in) ve `so` (swap out) > 0 ise sistem RAM yetmezliğinden can çekişiyordur.             |
+| **Cache analizi**  | `free -h`                                   | `buff/cache` yüksekse korkma, Linux RAM boş kalmasın diye kullanıyordur. Önemli olan `available`. |
 
-Bağlantı sorunları veya saldırı şüphesinde:
+## 🌐 Network Forensics
 
-| Komut               | Açıklama                                                     |
-| :------------------ | :----------------------------------------------------------- |
-| `ss -tulpn`         | Hangi portların dinlendiğini (listening) gösterir.           |
-| `uallow` (ufw)      | `ufw status verbose` ile firewall kurallarını kontrol et.    |
-| `iftop`             | Anlık ağ trafiğini (kim kime ne kadar veri atıyor) gösterir. |
-| `curl -I localhost` | Yerel web sunucusunun yanıt verip vermediğini test eder.     |
-| `ping 8.8.8.8`      | Sunucunun internete çıkışı var mı?                           |
+| Senaryo                | Senior Komut                       | Açıklama                                                                |
+| :--------------------- | :--------------------------------- | :---------------------------------------------------------------------- | ------------------------------------ |
+| **Paket Analizi**      | `tcpdump -nni eth0 port 80 -A -s0` | HTTP paketlerinin içeriğini (Body/Header) canlı izle. `-A` ASCII basar. |
+| **Portu kim tutuyor?** | `ss -tulpn                         | grep :80`                                                               | `netstat` yerine modern `ss` kullan. |
+| **DNS Sorunu**         | `dig +trace google.com`            | DNS sorgusunu root serverlardan başlayarak adım adım izle.              |
+| **Detaylı Trace**      | `mtr -zbwc 100 8.8.8.8`            | Hangi hop'ta paket kaybı var? (Ping + Traceroute kombosu).              |
+| **Açık Dosyalar**      | `lsof -iTCP -sTCP:ESTABLISHED`     | Sadece kurulu (established) TCP bağlantılarını dök.                     |
 
-## 📝 Disk ve Dosya Sistemi
+## 💿 Disk & IO Forensics
 
-"No space left on device" hatası alıyorsanız:
+| Senaryo                    | Senior Komut           | Açıklama                                                                   |
+| :------------------------- | :--------------------- | :------------------------------------------------------------------------- | ---------------------------- |
+| **Anlık IO**               | `iostat -xz 1`         | `%util` %100'e yakınsa disk darboğazdadır. `await` süresi tepki süresidir. |
+| **Hangi process yazıyor?** | `iotop -oPa`           | Diski yoran suçu process bazlı bul.                                        |
+| **Büyük dosyalar**         | `du -h --max-depth=1 / | sort -hr`                                                                  | Klasör klasör boyut analizi. |
+| **Inode bitmiş mi?**       | `df -i`                | Disk boşta olsa bile Inode biterse dosya yazamazsın.                       |
 
-| Komut      | Açıklama                                                         |
-| :--------- | :--------------------------------------------------------------- | ----- | ----------------------------------------------------------------- |
-| `df -h`    | Disk doluluk oranlarını gösterir.                                |
-| `df -i`    | Inode doluluk oranlarını gösterir (Çok küçük dosya varsa dolar). |
-| `du -sh \* | sort -hr                                                         | head` | Klasör boyutlarını büyükten küçüğe sıralar (Suçluyu bulmak için). |
-
-## 📜 Loglar (Günlükler)
-
-Son 1 saatte ne oldu?
-
-```bash
-# Nginx Hataları
-tail -f /var/log/nginx/error.log
-
-# Sistem Logları (Systemd) - Son 1 saat, Kırmızı hatalar
-journalctl -p 3 -xb --since "1 hour ago"
-
-# SSH Giriş Denemeleri
-grep "Failed password" /var/log/auth.log | tail -n 20
-```
-
-## 🔁 Servis Yönetimi
+## 🚨 Kernel & Logs
 
 ```bash
-systemctl status servis-adi   # Durum
-systemctl restart servis-adi  # Yeniden Başlat
-systemctl stop servis-adi     # Durdur
-systemctl enable servis-adi   # Açılışta Başlat
+# OOM Killer (RAM bitince kimi öldürdü?)
+dmesg -T | grep -i "kill"
+
+# Son 10 dakika içinde olan kritik hatalar
+journalctl -p 3 -xb --since "10 minutes ago"
+
+# Dosya kim tarafından silindi? (Auditd kuruluysa)
+ausearch -f /etc/passwd
 ```

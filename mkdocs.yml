@@ -150,6 +150,8 @@ nav:
       - Calistirma: scripts/execution.md
       - Guvenlik: scripts/safety.md
   - Troubleshooting:
-      - Genel: troubleshooting/index.md
-      - Hizli Teshis: troubleshooting/cheat-sheet.md
+      - Metodoloji (USE/RED): troubleshooting/index.md
+      - Hizli Teshis (Cheat Sheet): troubleshooting/cheat-sheet.md
+      - Performans Analizi (CPU/RAM): troubleshooting/performance.md
+      - Ag Analizi (Network): troubleshooting/network.md
       - Yaygin Sorunlar: troubleshooting/common-issues.md
