@@ -55,5 +55,9 @@ echo "🗑️ $RETENTION_DAYS gunden eski yedekler siliniyor..."
 find $BACKUP_DIR -name "db-*.sql.gz" -mtime +$RETENTION_DAYS -delete
 
 # 4. (Opsiyonel) Offsite Copy
-# rsync -avz $BACKUP_DIR user@backupserver:/remote/location/
+# 4. (Opsiyonel) Offsite Copy - Rclone
+# Rclone config yapilmis olmali: `rclone config`
+# rclone copy "$BACKUP_DIR/db-$DATE.sql.gz" remote:my-backups/ --quiet
+# Veya klasoru senkronize et:
+# rclone sync $BACKUP_DIR remote:my-backups/ --delete-after
 ```

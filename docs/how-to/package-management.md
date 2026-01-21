@@ -20,6 +20,11 @@ apt autoremove --purge
 apt clean
 ```
 
+> [!TIP] > **`apt autoremove` Güvenli mi?**
+> Evet! "Hacı bu ne?" demeyin. :) Bu komut sadece **"Öksüz Kalmış (Orphaned)"** paketleri, yani artık hiçbir uygulamanın ihtiyaç duymadığı kütüphaneleri siler. Özellikle eski Linux Kernellerini silip `/boot` alanını boşaltmak için kritiktir.
+>
+> **Dikkat:** Silmeden önce listeye göz atın. Eğer silinmesini istemediğiniz bir paket varsa `apt-mark manual paket_adi` komutuyla onu korumaya alabilirsiniz.
+
 ### Versiyon Sabitleme (Holding)
 
 Bir paketin (örn. Nginx veya MySQL) kazara güncellenmesini istemiyorsanız:
@@ -73,3 +78,37 @@ Sunucularda (Server Environment) **kullanılması önerilmez**.
 
 - **Neden?**: Snap arka planda sanal loop cihazları (mount points) oluşturur. `df -h` çıktısını kirletir ve bazen disk yönetimi sorunlarına yol açar.
 - **İstisna**: Sadece başka alternatifi yoksa (Örn: Bazı durumlarda Certbot) kullanılabilir ama `apt` veya `docker` her zaman önceliklidir.
+
+## 5. Otomatik Servis Yenileme (Needrestart) 🔄
+
+Linux'ta bir paket güncellendiğinde (örneğin `openssl`), bu kütüphaneyi kullanan servisler (Nginx, SSH vb.) otomatik olarak **YENİLENMEZ**. Eski (açıklı) versiyonu RAM'de kullanmaya devam ederler.
+
+Bunu çözmek için `needrestart` aracı kullanılır.
+
+### Kurulum
+
+```bash
+sudo apt update
+sudo apt install needrestart -y
+```
+
+### Konfigürasyon (Otomasyon İçin)
+
+Varsayılan olarak `needrestart` interaktif çalışır ve size soru sorar. Bu durum `apt upgrade` scriptlerinin takılmasına neden olabilir.
+
+Otomatik yeniden başlatma modunu açmak için:
+
+**Dosya:** `/etc/needrestart/needrestart.conf`
+
+```perl
+# 'i' (interactive) yerine 'a' (auto) yapın
+$nrconf{restart} = 'a';
+```
+
+Veya tek komutla ayar:
+
+```bash
+sudo sed -i "s/#\$nrconf{restart} = 'i';/\$nrconf{restart} = 'a';/" /etc/needrestart/needrestart.conf
+```
+
+Artık güncellemelerden sonra servisler otomatik olarak yeniden başlayacak ve güvenlik yamaları anında aktif olacaktır.

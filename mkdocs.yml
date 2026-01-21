@@ -78,10 +78,13 @@ nav:
           - Reverse Proxy: how-to/reverse-proxy.md
           - TLS: how-to/tls.md
           - Systemd Servis: how-to/systemd-service.md
+          - Zamanlanmış Görevler (Cron): how-to/cron.md
           - Logrotate: how-to/logrotate.md
           - Monitoring: how-to/monitoring.md
           - Monitoring Stack: how-to/monitoring-stack.md
-          - Yedekleme: how-to/backups.md
+          - Yedekleme (Backup): how-to/backups.md
+          - Sistem Snapshot (Timeshift): how-to/snapshots.md
+          - Sistem Klonlama (Tar): how-to/system-clone.md
           - Paket Yonetimi: how-to/package-management.md
           - Kullanici Yonetimi: how-to/user-management.md
           - Ag/Port Kontrolleri: how-to/port-checks.md
@@ -135,7 +138,11 @@ nav:
       - Servis Temizligi: security/services.md
       - Servis Sozlugu: security/service-glossary.md
       - Malware & Rootkit: security/malware.md
-      - Hacker Tuzaklama (Tarpit): security/tarpit.md
+      - Honeypot & Tarpit: security/tarpit.md
+      - Cowrie Tam Rehber (Analiz & Yönetim): security/cowrie-analysis.md
+      - Bastion Host (Jump Box): security/bastion.md
+      - Uyumluluk (OpenSCAP): security/compliance.md
+      - Ileri Seviye (SIEM/EDR): security/advanced-tools.md
       - Lynis: security/lynis.md
   - Uygulama Ornekleri (Recipes):
       - .NET Core Hardening: recipes/dotnet.md
@@ -147,8 +154,10 @@ nav:
       - Nginx Proxy Security: recipes/nginx.md
 
   - Sablonlar (Templates):
-      - Docker Compose: file-templates/docker-compose.md
-      - Nginx Config: file-templates/nginx.md
+      - PostgreSQL (Prod): file-templates/postgres.md
+      - Redis (Prod): file-templates/redis.md
+      - Nginx Proxy Manager (UI): file-templates/nginx-proxy-manager.md
+      - .NET Backend (Prod): file-templates/dotnet-backend.md
       - Env Example: file-templates/env-example.md
       - Systemd Service: file-templates/systemd.md
 
@@ -172,6 +181,7 @@ nav:
 
   - Mimari & Tasarim:
       - Genel Bakis (Diagrams): architecture/overview.md
+      - Port Stratejisi: architecture/port-strategy.md
 
   - Troubleshooting:
       - Metodoloji (USE/RED): troubleshooting/index.md

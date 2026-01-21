@@ -95,3 +95,83 @@ last
 # Başarısız giriş denemeleri
 lastb
 ```
+
+## 5. Varsayılan Cloud Kullanıcılarını (opc/ubuntu) Kapatma 🛡️
+
+Oracle Cloud (`opc`), AWS (`ubuntu/ec2-user`) gibi sağlayıcılar size varsayılan bir kullanıcı verir. Güvenlik için bu kullanıcıyı devre dışı bırakıp kendi kullanıcınızı kullanmalısınız.
+
+### Adım 1: Yeni Admin Oluşturun
+
+Önce kendinize bir kullanıcı açın ve sudo verin (Bölüm 1 ve 2'deki gibi).
+
+### Adım 2: Test Edin (Çok Önemli!)
+
+Yeni bir terminal açıp **yeni kullanıcı ile** sunucuya giriş yapabildiğinizi ve `sudo` komutu çalıştırabildiğinizi doğrulayın. Asla test etmeden eski kullanıcıyı kapatmayın!
+
+### Adım 3: SSH Erişimini Kısıtlayın (`AllowUsers`)
+
+Bu en etkili yöntemdir. Sadece sizin kullanıcınızın SSH yapmasına izin verin.
+
+`/etc/ssh/sshd_config` dosyasına ekleyin:
+
+```bash
+# Sadece bu kullanıcılara izin ver (Boşlukla ayırabilirsiniz)
+AllowUsers yeni_kullanici baska_admin
+```
+
+SSH servisini yeniden başlatın: `sudo systemctl restart ssh`
+
+### Adım 4: Varsayılan Kullanıcıyı Kilitleyin
+
+Kullanıcıyı silmek (`deluser`) bazen risklidir (Cloud-init scriptleri bu kullanıcıya bağlı olabilir). Bunun yerine kilitlemek daha güvenlidir.
+
+```bash
+# 1. Şifresini kilitle
+sudo usermod -L opc
+
+# 2. Shell erişimini kapat (Giriş yapamaz)
+sudo usermod -s /usr/sbin/nologin opc
+```
+
+Artık `opc` veya `ubuntu` kullanıcısı ile sisteme giriş yapılamaz.
+
+## 6. Kısıtlı Kullanıcı Oluşturma (Geliştirici) 👨‍💻
+
+Bazen ekibe yeni katılan bir geliştiriciye (junior) sunucu erişimi vermeniz gerekir ama **yönetici (sudo)** yetkisi olmasını istemezsiniz.
+
+### Adım 1: Kullanıcıyı Oluşturun
+
+```bash
+# Sadece kullanıcı oluşturur. 'sudo' grubuna eklemediğiniz için YETKİSİZDİR.
+sudo adduser mehmet
+```
+
+### Adım 2: SSH İzni Verin
+
+Eğer `AllowUsers` kullanıyorsanız (ki kullanmalısınız), bu kullanıcıyı listeye ekleyin:
+
+**`/etc/ssh/sshd_config`:**
+
+```bash
+# Hem admin hem de geliştiriciye izin ver
+AllowUsers admin_user mehmet
+```
+
+Sonra servisi yeniden başlatın: `sudo systemctl restart ssh`
+
+### Adım 3: SSH Anahtarını Ekleyin
+
+Bölüm 3'teki "Sadece SSH Key" adımlarını uygulayın.
+
+### Adım 4: Test (Doğrulama)
+
+Mehmet kullanıcısı ile giriş yapın ve `sudo` komutunu deneyin.
+
+```bash
+ssh mehmet@sunucu
+mehmet@server:~$ sudo apt update
+[sudo] password for mehmet:
+mehmet is not in the sudoers file. This incident will be reported. 🚫
+```
+
+Bu hatayı alıyorsanız işlem başarılıdır. Kullanıcı sadece kendi ev dizininde işlem yapabilir, sistem ayarlarını bozamaz.

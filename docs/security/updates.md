@@ -134,3 +134,31 @@ systemctl status apt-daily-upgrade.timer
 ```
 
 Çıktıda `Active: active (waiting)` görmelisiniz.
+
+## 8. Güncelleme Bildirimleri (MOTD) 📢
+
+SSH ile sunucuya giriş yaptığınızda karşınıza çıkan _"3 updates can be applied immediately"_ yazısını sağlayan araç `update-notifier-common` paketidir.
+
+### Kontrol Etme
+
+Sisteminizde yüklü değilse (Ubuntu Minimal sürümlerde olmayabilir):
+
+```bash
+apt list --installed update-notifier-common
+```
+
+Yüklü değilse kurun:
+
+```bash
+sudo apt install update-notifier-common
+```
+
+### Nasıl Çalışır?
+
+Bu araç `/var/lib/update-notifier/updates-available` adında bir dosyayı günceller. SSH girişinde (PAM modülü) bu dosya okunur ve size mesaj olarak gösterilir.
+
+Eğer mesajın güncel olmadığını düşünüyorsanız, manuel olarak tetikleyebilirsiniz:
+
+```bash
+/usr/lib/update-notifier/update-motd-updates-available
+```

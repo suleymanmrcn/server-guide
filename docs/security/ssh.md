@@ -46,8 +46,8 @@ SSH ayarını değiştirmeden önce, Firewall'da hem mevcut kapıyı hem yeni ka
     # Çıktıda HEM 22/tcp HEM 2222/tcp "ALLOW" olarak görünmeli.
     ```
 
-> [!WARNING] > **Oracle Cloud Kullanıcıları:**
-> Sadece UFW yetmez! Oracle panelinden (VCN > Security List) de **2222** portuna Ingress Rule eklemelisiniz. Yoksa sunucu 2222'den gelen paketi daha UFW'ye gelmeden reddeder.
+> [!WARNING] > **AWS, Oracle ve Cloud Kullanıcıları:**
+> Sadece UFW yetmez! Kullandığınız panelden (AWS Security Groups, Oracle Security List, Hetzner Firewall vb.) **2222** portuna izin vermelisiniz. Yoksa "bahçe kapısı" kapalı olduğu için eve giremezsiniz.
 
 ## Adım 2: Konfigürasyon Değişikliği
 
@@ -59,6 +59,16 @@ Dosyayı açın:
 sudo nano /etc/ssh/sshd_config
 ```
 
+> [!TIP] > **Port Seçimi:** 2222 çok bilinen bir alternatiftir. Daha az taranan bir port seçmek isteyebilirsiniz (örn: 41922, 52022). Ancak 1024 üstü olmalı.
+
+> [!WARNING] > **RHEL/CentOS/Rocky Linux Kullanıcıları:**
+> SELinux, varsayılan olarak SSH'ın port değiştirmesini engeller. Şu komutu çalıştırmalısınız:
+>
+> ```bash
+> sudo semanage port -a -t ssh_port_t -p tcp 2222
+> # semanage yoksa: sudo dnf install policycoreutils-python-utils
+> ```
+
 Şunları düzenleyin (satırın başında `#` varsa kaldırın):
 
 ```ssh
@@ -69,52 +79,43 @@ PasswordAuthentication no
 
 Kaydet ve çık (`Ctrl+O`, `Enter`, `Ctrl+X`).
 
-## Adım 3: Ubuntu 22.04+ Socket Sorunu (Kritik)
+## Adım 3: Ubuntu 22.04+ Socket Sorunu (En Garanti Yöntem)
 
-Ubuntu 22.04 ve sonrasında SSH, varsayılan olarak **"Socket Activation"** ile çalışır. Yani `sshd_config` dosyasında portu değiştirseniz bile, `systemd` (ssh.socket) 22. portu dinlemeye devam eder ve değişikliği görmezden gelir.
+Ubuntu 22.04 ve sonrasında SSH, **"Socket Activation"** ile çalışır. Önce durumunuzu kontrol edin:
 
-**Bu sorunu çözmek ve standart moda geçmek için:**
+```bash
+# Socket modunda mısınız kontrol edin
+if systemctl is-enabled ssh.socket 2>/dev/null | grep -q "enabled"; then
+    echo "⚠️  Socket Activation aktif - Aşağıdaki adımları uygulayın"
+else
+    echo "✅ Klasik mod - Bu adımı atlayıp Adım 4'e geçebilirsiniz"
+fi
+```
 
-1.  Socket'i durdurun ve iptal edin:
+**Eğer Socket Aktifse:**
 
-    ```bash
-    sudo systemctl stop ssh.socket
-    sudo systemctl disable ssh.socket
-    ```
+Socket ayarlarını düzenlemek için şu komutu girin:
 
-2.  Klasik servisi aktif edin:
-    ```bash
-    sudo systemctl enable ssh.service
-    ```
+```bash
+sudo systemctl edit ssh.socket
+```
 
-> [!NOTE]
-> Bu işlem CentOS/RHEL veya Debian'da gerekmez, onlar zaten standart modda çalışır. Ama Ubuntu'da **şarttır**.
+Açılan boş sayfaya şunları yapıştırın ve kaydedin (`Ctrl+O`, `Enter`, `Ctrl+X`):
 
-??? info "Derinlemesine Bakış: SSH Socket Nedir?"
-**Socket Activation**, servisin sürekli açık kalması yerine (daemon), systemd'nin bir "kapı görevlisi" (socket) gibi beklemesidir. Kapıya biri vurunca (bağlantı gelince) asıl servisi o an uyandırır.
+```ini
+[Socket]
+ListenStream=
+ListenStream=2222
+```
 
-    **Sisteminizde hangisinin aktif olduğunu anlamak için:**
+_(Not: İlk satırdaki boş `ListenStream=` varsayılan 22 portunu siler, ikincisi yenisini ekler.)_
 
-    1.  **Durum Kontrolü:**
-        ```bash
-        systemctl status ssh ssh.socket --no-pager
-        ```
-        *   `ssh.socket`: **active (running)** ise Socket modundasınız (Ubuntu 22.04+ varsayılanı).
-        *   `ssh.service`: **active (running)** ve socket kapalıysa Klasik moddasınız.
+Değişikliği uygulayıp servisi yeniden başlatın:
 
-    2.  **Hangisi Dinliyor?**
-        ```bash
-        sudo ss -lntp | grep ':2222'
-        ```
-        *   Çıktıda `systemd` görüyorsanız → Socket dinliyor.
-        *   Çıktıda `sshd` görüyorsanız → Servis dinliyor.
-
-    3.  **Yönetim İpucu:**
-        Socket modundaysanız, restart atarken `ssh` servisini değil, `ssh.socket`i restart etmeniz daha garantidir:
-        ```bash
-        sudo systemctl daemon-reload
-        sudo systemctl restart ssh.socket
-        ```
+```bash
+sudo systemctl daemon-reload
+sudo systemctl restart ssh.socket
+```
 
 ## Adım 4: Test ve Restart
 
@@ -129,31 +130,40 @@ Hatayı restart atmadan önce yakalamalıyız.
     _(Çıktı yoksa her şey yolunda demektir. Hata varsa düzeltin!)_
 
 2.  **Servisi yeniden başlat:**
+
     ```bash
     sudo systemctl restart ssh
     ```
+
     _(Bağlantınız hala kopmadı, korkmayın.)_
 
-## Adım 4: İçeriden Bağlantı Testi (Localhost)
+3.  **Dinlenen Portu Doğrula:**
+    ```bash
+    sudo ss -lntp | grep 2222
+    # Çıktı: LISTEN ... :2222 ... users:(("sshd")) veya systemd
+    ```
+
+## Adım 5: İçeriden Bağlantı Testi (Localhost)
 
 Yeni terminal açmadan önce, sunucunun kendi kendine 2222'den bağlanabildiğini doğrulayın:
 
 ```bash
-ssh -p 2222 localhost
+ssh -v -p 2222 localhost
 ```
 
-_Şifre veya key soruyorsa (veya "Permission denied" diyorsa) port çalışıyor demektir. "Connection refused" diyorsa servis kalkmamıştır._
+_Şifre veya key soruyorsa (veya "Permission denied" diyorsa) port çalışıyor demektir. `-v` ile detayları görebilirsiniz._
 
-## Adım 5: Dışarıdan Bağlantı Testi
+## Adım 6: Dışarıdan Bağlantı Testi
 
 1.  Mevcut terminali **KAPATMAYIN**.
-2.  Bilgisayarınızdan **yeni bir terminal** açın.
-3.  Bağlanmayı deneyin:
+2.  **AWS/Cloud Panel Kontrolü:** Security Group ayarlarında tcp/2222 portunu açtığınızdan emin olun.
+3.  Bilgisayarınızdan **yeni bir terminal** açın.
+4.  Bağlanmayı deneyin:
     ```bash
     ssh -p 2222 kullanici@sunucu-ip
     ```
 
-## Adım 6: Temizlik (Eski Kapıyı Kapat)
+## Adım 7: Temizlik (Eski Kapıyı Kapat)
 
 Başarıyla girdiyseniz artık 22'ye ihtiyacınız yok.
 
@@ -164,7 +174,7 @@ sudo ufw reload
 
 Artık sadece 2222 açık! 🔒
 
-## Adım 7: İleri Düzey Hardening (Lynis Önerileri)
+## Adım 8: İleri Düzey Hardening (Lynis Önerileri)
 
 Bu ayarlar sadece "puan artırmak" için değildir; sunucunuzun yeteneklerini kısıtlayarak saldırı yüzeyini daraltır.
 
@@ -213,7 +223,7 @@ AllowAgentForwarding no
 X11Forwarding no
 
 # Boş Duran Bağlantıları Kes
-# (3 deneme x 300 saniye = Cevap vermeyen client'ı at)
+# (2 deneme x 300 saniye = 10 dakika sonra cevap vermeyen client'ı at)
 ClientAliveInterval 300
 ClientAliveCountMax 2
 
@@ -233,6 +243,65 @@ TCPKeepAlive no
 
 Ayarları uygulayın:
 
-```bash
 sudo sshd -t && sudo systemctl reload ssh
+
+````
+
+---
+
+## Adım 9: Fail2Ban Hatırlatması 👮‍♂️
+
+Port değiştirdiğiniz için Fail2Ban'ın da haberi olmalı. Yoksa saldırganları eski kapıda arar.
+
+1.  Dosyayı açın: `sudo nano /etc/fail2ban/jail.local`
+2.  `[sshd]` bölümünü bulun ve portu güncelleyin:
+
+```ini
+[sshd]
+enabled = true
+port = 2222
+````
+
+3.  Fail2Ban'ı yeniden başlatın: `sudo systemctl restart fail2ban`
+
+---
+
+## Adım 10: Acil Durum: Geri Dönüş (Rollback) 🚨
+
+Eğer kendinizi kilitlediyseniz ve **konsol erişiminiz** (VNC/KVM) varsa:
+
+1.  Cloud panelinden VNC/Serial Console açın.
+2.  Şu komutları sırasıyla çalıştırın:
+
+```bash
+# 1. Eski portu aç
+sudo ufw allow 22/tcp
+
+# 2. Socket ayarını sıfırla (İçeriği silip kaydet)
+sudo systemctl edit ssh.socket --force
+# (Açılan editörde her şeyi silin, boş kaydedin)
+
+# 3. Config'i düzelt
+sudo sed -i 's/^Port 2222/Port 22/' /etc/ssh/sshd_config
+
+# 4. Servisleri resetle
+sudo systemctl restart ssh.socket ssh
 ```
+
+---
+
+## 📋 Özet Kontrol Listesi
+
+| Adım | İşlem                        | Durum |
+| :--- | :--------------------------- | :---- |
+| 1    | UFW'de 22 ve 2222 açık       | ⬜    |
+| 2    | `sshd_config` düzenlendi     | ⬜    |
+| 3    | Socket ayarı (Ubuntu 22.04+) | ⬜    |
+| 4    | `sshd -t` testi başarılı     | ⬜    |
+| 5    | Localhost testi başarılı     | ⬜    |
+| 6    | Dışarıdan bağlantı başarılı  | ⬜    |
+| 7    | Eski port (22) kapatıldı     | ⬜    |
+| 8    | Hardening uygulandı          | ⬜    |
+| 9    | Fail2Ban güncellendi         | ⬜    |
+
+**Tebrikler! SSH portunuz artık güvenli bir şekilde değiştirildi.** 🎉

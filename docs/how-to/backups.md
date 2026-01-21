@@ -12,36 +12,13 @@ Basit ama hayat kurtarır:
 
 ## 2. Otomatik Yedekleme Scripti
 
-Aşağıdaki script, belirlediğiniz klasörleri ve MySQL veritabanını sıkıştırıp tarihli olarak `/backup` dizinine atar. Ayrıca eski yedekleri (7 günden yaşlı) otomatik temizler.
+Aşağıdaki script, belirlediğiniz klasörleri ve MySQL/Postgres veritabanını sıkıştırıp tarihli olarak `/backups` dizinine atar.
 
-Dosya konumu: `/root/scripts/daily-backup.sh`
+Bu script **[Script Kütüphanesi > Veritabanı Yedekleme](../scripts/library/backup.md)** altında detaylandırılmıştır.
 
 ```bash
-#!/bin/bash
-set -e
-
-# --- AYARLAR ---
-BACKUP_DIR="/backups"
-DIRS_TO_BACKUP="/etc /var/www /home/deployer"
-DB_NAME="myapp_db"
-DB_USER="backup_user"
-DB_PASS="gizli_sifre"
-DATE=$(date +%F_%H-%M)
-# ---------------
-
-mkdir -p $BACKUP_DIR
-
-echo "📦 [$DATE] Dosya yedegi aliniyor..."
-tar -czf "$BACKUP_DIR/files_$DATE.tar.gz" $DIRS_TO_BACKUP
-
-echo "🗄️ [$DATE] Veritabani yedegi aliniyor..."
-mysqldump -u $DB_USER -p"$DB_PASS" $DB_NAME | gzip > "$BACKUP_DIR/db_${DB_NAME}_$DATE.sql.gz"
-
-echo "🧹 Eski yedekler temizleniyor (7 gunden eski)..."
-find $BACKUP_DIR -type f -name "*.gz" -mtime +7 -delete
-
-echo "✅ Yedekleme tamamlandi: $BACKUP_DIR"
-# Buraya rclone sync veya s3 upload komutu eklenebilir.
+# Scripti çalıştırma örneği
+/root/scripts/backup-db.sh
 ```
 
 ## 3. Zamanlama (Cron)
@@ -55,18 +32,11 @@ crontab -e
 Eklenecek satır:
 
 ```cron
-0 3 * * * /bin/bash /root/scripts/daily-backup.sh >> /var/log/backup.log 2>&1
+0 3 * * * /bin/bash /root/scripts/backup-db.sh >> /var/log/backup.log 2>&1
 ```
 
 ## 4. Off-Site Transfer (Rclone)
 
-Yedekleri sunucuda tutmak yetmez (Sunucu yanarsa yedekler de yanar). `rclone` kullanarak S3, Google Drive veya Dropbox'a atın.
+Yedekleri sunucuda tutmak yetmez. `rclone` kullanarak S3, Google Drive veya Dropbox'a atın.
 
-```bash
-# Rclone kurulumu ve konfigürasyonu
-apt install rclone
-rclone config # (Sihirbazı takip edin)
-
-# Scriptin sonuna eklenecek komut:
-rclone copy $BACKUP_DIR/ remote:my-server-backups/ --progress
-```
+Rclone kurulumu ve detaylı kullanımı script dosyasının içinde açıklanmıştır (bkz: [backup-db.sh](../scripts/library/backup.md#kaynak-kod)).

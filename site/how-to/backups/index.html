@@ -12,7 +12,7 @@
         <link rel="prev" href="../monitoring-stack/">
       
       
-        <link rel="next" href="../package-management/">
+        <link rel="next" href="../snapshots/">
       
       
         
@@ -23,7 +23,7 @@
     
     
       
-        <title>Yedekleme - Sunucu Kurulum Rehberi</title>
+        <title>Yedekleme (Backup) - Sunucu Kurulum Rehberi</title>
       
     
     
@@ -111,7 +111,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Yedekleme
+              Yedekleme (Backup)
             
           </span>
         </div>
@@ -1079,6 +1079,8 @@
       
         
       
+        
+      
     
     
     
@@ -1439,7 +1441,7 @@
   <span class="md-ellipsis">
     
   
-    Yedekleme
+    Yedekleme (Backup)
   
 
     
@@ -1457,7 +1459,7 @@
   <span class="md-ellipsis">
     
   
-    Yedekleme
+    Yedekleme (Backup)
   
 
     
@@ -1530,6 +1532,34 @@
   
 </nav>
       
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../snapshots/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Sistem Snapshot (Timeshift)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
     </li>
   
 
@@ -4814,50 +4844,21 @@
 <li><strong>1</strong> kopya mutlaka "Off-site" (Sunucu dışında) olsun.</li>
 </ul>
 <h2 id="2-otomatik-yedekleme-scripti">2. Otomatik Yedekleme Scripti</h2>
-<p>Aşağıdaki script, belirlediğiniz klasörleri ve MySQL veritabanını sıkıştırıp tarihli olarak <code>/backup</code> dizinine atar. Ayrıca eski yedekleri (7 günden yaşlı) otomatik temizler.</p>
-<p>Dosya konumu: <code>/root/scripts/daily-backup.sh</code></p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="ch">#!/bin/bash</span>
-<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="nb">set</span><span class="w"> </span>-e
-<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>
-<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="c1"># --- AYARLAR ---</span>
-<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="nv">BACKUP_DIR</span><span class="o">=</span><span class="s2">&quot;/backups&quot;</span>
-<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a><span class="nv">DIRS_TO_BACKUP</span><span class="o">=</span><span class="s2">&quot;/etc /var/www /home/deployer&quot;</span>
-<a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a><span class="nv">DB_NAME</span><span class="o">=</span><span class="s2">&quot;myapp_db&quot;</span>
-<a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a><span class="nv">DB_USER</span><span class="o">=</span><span class="s2">&quot;backup_user&quot;</span>
-<a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a><span class="nv">DB_PASS</span><span class="o">=</span><span class="s2">&quot;gizli_sifre&quot;</span>
-<a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a><span class="nv">DATE</span><span class="o">=</span><span class="k">$(</span>date<span class="w"> </span>+%F_%H-%M<span class="k">)</span>
-<a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a><span class="c1"># ---------------</span>
-<a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a>
-<a id="__codelineno-0-13" name="__codelineno-0-13" href="#__codelineno-0-13"></a>mkdir<span class="w"> </span>-p<span class="w"> </span><span class="nv">$BACKUP_DIR</span>
-<a id="__codelineno-0-14" name="__codelineno-0-14" href="#__codelineno-0-14"></a>
-<a id="__codelineno-0-15" name="__codelineno-0-15" href="#__codelineno-0-15"></a><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;📦 [</span><span class="nv">$DATE</span><span class="s2">] Dosya yedegi aliniyor...&quot;</span>
-<a id="__codelineno-0-16" name="__codelineno-0-16" href="#__codelineno-0-16"></a>tar<span class="w"> </span>-czf<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$BACKUP_DIR</span><span class="s2">/files_</span><span class="nv">$DATE</span><span class="s2">.tar.gz&quot;</span><span class="w"> </span><span class="nv">$DIRS_TO_BACKUP</span>
-<a id="__codelineno-0-17" name="__codelineno-0-17" href="#__codelineno-0-17"></a>
-<a id="__codelineno-0-18" name="__codelineno-0-18" href="#__codelineno-0-18"></a><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;🗄️ [</span><span class="nv">$DATE</span><span class="s2">] Veritabani yedegi aliniyor...&quot;</span>
-<a id="__codelineno-0-19" name="__codelineno-0-19" href="#__codelineno-0-19"></a>mysqldump<span class="w"> </span>-u<span class="w"> </span><span class="nv">$DB_USER</span><span class="w"> </span>-p<span class="s2">&quot;</span><span class="nv">$DB_PASS</span><span class="s2">&quot;</span><span class="w"> </span><span class="nv">$DB_NAME</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>gzip<span class="w"> </span>&gt;<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$BACKUP_DIR</span><span class="s2">/db_</span><span class="si">${</span><span class="nv">DB_NAME</span><span class="si">}</span><span class="s2">_</span><span class="nv">$DATE</span><span class="s2">.sql.gz&quot;</span>
-<a id="__codelineno-0-20" name="__codelineno-0-20" href="#__codelineno-0-20"></a>
-<a id="__codelineno-0-21" name="__codelineno-0-21" href="#__codelineno-0-21"></a><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;🧹 Eski yedekler temizleniyor (7 gunden eski)...&quot;</span>
-<a id="__codelineno-0-22" name="__codelineno-0-22" href="#__codelineno-0-22"></a>find<span class="w"> </span><span class="nv">$BACKUP_DIR</span><span class="w"> </span>-type<span class="w"> </span>f<span class="w"> </span>-name<span class="w"> </span><span class="s2">&quot;*.gz&quot;</span><span class="w"> </span>-mtime<span class="w"> </span>+7<span class="w"> </span>-delete
-<a id="__codelineno-0-23" name="__codelineno-0-23" href="#__codelineno-0-23"></a>
-<a id="__codelineno-0-24" name="__codelineno-0-24" href="#__codelineno-0-24"></a><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;✅ Yedekleme tamamlandi: </span><span class="nv">$BACKUP_DIR</span><span class="s2">&quot;</span>
-<a id="__codelineno-0-25" name="__codelineno-0-25" href="#__codelineno-0-25"></a><span class="c1"># Buraya rclone sync veya s3 upload komutu eklenebilir.</span>
+<p>Aşağıdaki script, belirlediğiniz klasörleri ve MySQL/Postgres veritabanını sıkıştırıp tarihli olarak <code>/backups</code> dizinine atar.</p>
+<p>Bu script <strong><a href="../../scripts/library/backup/">Script Kütüphanesi &gt; Veritabanı Yedekleme</a></strong> altında detaylandırılmıştır.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="c1"># Scripti çalıştırma örneği</span>
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>/root/scripts/backup-db.sh
 </code></pre></div>
 <h2 id="3-zamanlama-cron">3. Zamanlama (Cron)</h2>
 <p>Scripti her gece 03:00'da çalıştırmak için:</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>crontab<span class="w"> </span>-e
 </code></pre></div>
 <p>Eklenecek satır:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>0 3 * * * /bin/bash /root/scripts/daily-backup.sh &gt;&gt; /var/log/backup.log 2&gt;&amp;1
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>0 3 * * * /bin/bash /root/scripts/backup-db.sh &gt;&gt; /var/log/backup.log 2&gt;&amp;1
 </code></pre></div>
 <h2 id="4-off-site-transfer-rclone">4. Off-Site Transfer (Rclone)</h2>
-<p>Yedekleri sunucuda tutmak yetmez (Sunucu yanarsa yedekler de yanar). <code>rclone</code> kullanarak S3, Google Drive veya Dropbox'a atın.</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="c1"># Rclone kurulumu ve konfigürasyonu</span>
-<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>apt<span class="w"> </span>install<span class="w"> </span>rclone
-<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a>rclone<span class="w"> </span>config<span class="w"> </span><span class="c1"># (Sihirbazı takip edin)</span>
-<a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a>
-<a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a><span class="c1"># Scriptin sonuna eklenecek komut:</span>
-<a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a>rclone<span class="w"> </span>copy<span class="w"> </span><span class="nv">$BACKUP_DIR</span>/<span class="w"> </span>remote:my-server-backups/<span class="w"> </span>--progress
-</code></pre></div>
+<p>Yedekleri sunucuda tutmak yetmez. <code>rclone</code> kullanarak S3, Google Drive veya Dropbox'a atın.</p>
+<p>Rclone kurulumu ve detaylı kullanımı script dosyasının içinde açıklanmıştır (bkz: <a href="../../scripts/library/backup/#kaynak-kod">backup-db.sh</a>).</p>
 
 
 
@@ -4910,13 +4911,13 @@
         
         
           
-          <a href="../package-management/" class="md-footer__link md-footer__link--next" aria-label="Sonraki: Paket Yonetimi">
+          <a href="../snapshots/" class="md-footer__link md-footer__link--next" aria-label="Sonraki: Sistem Snapshot (Timeshift)">
             <div class="md-footer__title">
               <span class="md-footer__direction">
                 Sonraki
               </span>
               <div class="md-ellipsis">
-                Paket Yonetimi
+                Sistem Snapshot (Timeshift)
               </div>
             </div>
             <div class="md-footer__button md-icon">
