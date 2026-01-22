@@ -71,22 +71,29 @@ nav:
   - Sistem Yonetimi (Ops):
       - Kurulum & Konfigurasyon:
           - Genel: how-to/index.md
+          # === TEMEL SİSTEM ===
           - Temel OS: how-to/base-os.md
+          - Kullanici Yonetimi: how-to/user-management.md
+          - Shell Konfigürasyonu (.bashrc): how-to/shell-config.md
+          - Dosya İzinleri (chmod, chown): how-to/file-permissions.md
+          - Paket Yonetimi: how-to/package-management.md
           - Swap Bellek: how-to/swap.md
+          # === ALTYAPI ===
           - Docker & Storage: how-to/docker.md
           - Nginx: how-to/nginx.md
           - Reverse Proxy: how-to/reverse-proxy.md
           - TLS: how-to/tls.md
+          # === OTOMASYON ===
           - Systemd Servis: how-to/systemd-service.md
           - Zamanlanmış Görevler (Cron): how-to/cron.md
-          - Logrotate: how-to/logrotate.md
+          # === BAKIM & İZLEME ===
           - Monitoring: how-to/monitoring.md
           - Monitoring Stack: how-to/monitoring-stack.md
+          - Logrotate: how-to/logrotate.md
           - Yedekleme (Backup): how-to/backups.md
           - Sistem Snapshot (Timeshift): how-to/snapshots.md
           - Sistem Klonlama (Tar): how-to/system-clone.md
-          - Paket Yonetimi: how-to/package-management.md
-          - Kullanici Yonetimi: how-to/user-management.md
+          # === NETWORK ===
           - Ag/Port Kontrolleri: how-to/port-checks.md
       - Olay Mudahale (Runbooks):
           - Genel: runbooks/index.md
@@ -144,6 +151,18 @@ nav:
       - Uyumluluk (OpenSCAP): security/compliance.md
       - Ileri Seviye (SIEM/EDR): security/advanced-tools.md
       - Lynis: security/lynis.md
+  
+  # === PRODUCTION HAZIRLIK ===
+  - Sablonlar (Templates):
+      - PostgreSQL (Prod): file-templates/postgres.md
+      - MariaDB (Prod): file-templates/mariadb.md
+      - Redis (Prod): file-templates/redis.md
+      - Nginx Proxy Manager (UI): file-templates/nginx-proxy-manager.md
+      - .NET Backend (Prod): file-templates/dotnet-backend.md
+      - Monitoring Stack (Prometheus): file-templates/monitoring-stack.md
+      - Env Example: file-templates/env-example.md
+      - Systemd Service: file-templates/systemd.md
+
   - Uygulama Ornekleri (Recipes):
       - .NET Core Hardening: recipes/dotnet.md
       - React + Nginx: recipes/react.md
@@ -153,20 +172,15 @@ nav:
       - Traefik Proxy: recipes/traefik.md
       - Nginx Proxy Security: recipes/nginx.md
 
-  - Sablonlar (Templates):
-      - PostgreSQL (Prod): file-templates/postgres.md
-      - Redis (Prod): file-templates/redis.md
-      - Nginx Proxy Manager (UI): file-templates/nginx-proxy-manager.md
-      - .NET Backend (Prod): file-templates/dotnet-backend.md
-      - Env Example: file-templates/env-example.md
-      - Systemd Service: file-templates/systemd.md
-
   - Kontrol Listeleri:
       - Ilk Kurulum: checklists/server-first-setup.md
       - Docker App Launch: checklists/app-launch.md
       - Go/No-Go Decision: checklists/prod-ready.md
+
+  # === OTOMASYON ===
   - Scriptler:
       - Genel: scripts/index.md
+      - Bash Script Rehberi: scripts/bash-guide.md
       - Otomasyon: scripts/automation.md
       - Standartlar: scripts/conventions.md
       - Calistirma: scripts/execution.md
@@ -179,6 +193,7 @@ nav:
           - Saglik Kontrolu (Health Check): scripts/library/health-check.md
           - DB Restore (Geri Donus): scripts/library/restore.md
 
+  # === PLANLAMA & SORUN ÇÖZME ===
   - Mimari & Tasarim:
       - Genel Bakis (Diagrams): architecture/overview.md
       - Port Stratejisi: architecture/port-strategy.md
@@ -189,3 +204,4 @@ nav:
       - Performans Analizi (CPU/RAM): troubleshooting/performance.md
       - Ag Analizi (Network): troubleshooting/network.md
       - Yaygin Sorunlar: troubleshooting/common-issues.md
+
