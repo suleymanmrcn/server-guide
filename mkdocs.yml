@@ -116,13 +116,16 @@ nav:
           - Backup Restore Fail: runbooks/backup-restore-fail.md
           - Config Deploy Hatasi: runbooks/config-deploy-fail.md
           - SSH Lockout: runbooks/ssh-lockout.md
-      - Referans & Komutlar:
-          - Linux Komutlari:
-              - Dosya Islemleri: reference/commands/file.md
-              - Disk & Kaynak: reference/commands/disk.md
-              - Ag & Port: reference/commands/network.md
-              - Docker Komutlari: reference/commands/docker.md
-              - Sistem & Servis: reference/commands/system.md
+  
+  # === REFERANS ===
+  - Referans & Komutlar:
+      - Dosya Islemleri: reference/commands/file.md
+      - Disk & Kaynak: reference/commands/disk.md
+      - Ag & Port: reference/commands/network.md
+      - Docker Komutlari: reference/commands/docker.md
+      - Sistem & Servis: reference/commands/system.md
+
+  # === GÜVENLİK ===
   - Guvenlik:
       - Genel: security/index.md
       - SSH Hardening: security/ssh.md

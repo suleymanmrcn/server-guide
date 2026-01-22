@@ -45,15 +45,11 @@ services:
       - CHOWN
       - SETGID
       - SETUID
-      # Dosya izinleri için bazen gerekebilir:
       - DAC_OVERRIDE
 
     # --- KAYNAKLAR ---
-    deploy:
-      resources:
-        limits:
-          cpus: "1.0"
-          memory: 1G
+    mem_limit: 1g
+    cpus: 1.0
 
     sysctls:
       # Redis performans ayarı

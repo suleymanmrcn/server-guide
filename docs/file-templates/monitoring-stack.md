@@ -57,11 +57,8 @@ services:
       - ./prometheus/data:/prometheus
     networks:
       - monitoring
-    deploy:
-      resources:
-        limits:
-          memory: 1G
-          cpus: "1.0"
+    mem_limit: 1g
+    cpus: 1.0
 
   # Grafana - Görselleştirme
   grafana:
@@ -83,10 +80,7 @@ services:
       - monitoring
     depends_on:
       - prometheus
-    deploy:
-      resources:
-        limits:
-          memory: 512M
+    mem_limit: 512m
 
   # Node Exporter - Sistem metrikleri
   node-exporter:

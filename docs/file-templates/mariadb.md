@@ -78,13 +78,9 @@ services:
       - no-new-privileges:true
 
     # --- KAYNAK LİMİTLERİ ---
-    deploy:
-      resources:
-        limits:
-          cpus: "2.0"
-          memory: 2G
-        reservations:
-          memory: 512M
+    mem_limit: 2g
+    mem_reservation: 512m
+    cpus: 2.0
 
     # --- SAĞLIK KONTROLÜ ---
     healthcheck:

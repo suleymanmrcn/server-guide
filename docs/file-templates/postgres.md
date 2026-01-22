@@ -102,11 +102,8 @@ services:
       # Bazı durumlarda DAC_OVERRIDE gerekebilir ama önce bunlar denenmeli
 
     # --- KAYNAKLAR ---
-    deploy:
-      resources:
-        limits:
-          cpus: "2.0"
-          memory: 4G
+    mem_limit: 4g
+    cpus: 2.0
 
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U app_user -d app_production"]
