@@ -79,7 +79,9 @@ nav:
           - Paket Yonetimi: how-to/package-management.md
           - Swap Bellek: how-to/swap.md
           # === ALTYAPI ===
-          - Docker & Storage: how-to/docker.md
+          - Docker Kurulum & Storage: how-to/docker.md
+          - Docker Compose Rehberi: how-to/docker-compose.md
+          - Dockerfile Yazma: how-to/dockerfile-doc.md
           - Nginx: how-to/nginx.md
           - Reverse Proxy: how-to/reverse-proxy.md
           - TLS: how-to/tls.md

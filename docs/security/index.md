@@ -4,25 +4,35 @@ Tebrikler! Bu rehberdeki adımları tamamladıysanız, sunucunuz artık sıradan
 
 Aşağıdaki liste, uyguladığımız tüm güvenlik katmanlarının özetidir.
 
-## 🧱 15 Katmanlı Güvenlik Mimarisi
+## 🧱 Katmanlı Güvenlik Mimarisi (Defense in Depth)
 
-| #      | Katman            | Rehber                                            | Amaç                                                              |
-| :----- | :---------------- | :------------------------------------------------ | :---------------------------------------------------------------- |
-| **1**  | **Temel Hijyen**  | [Servis Temizliği](services.md)                   | Gereksiz servisleri sil, saldırı yüzeyini küçült.                 |
-| **2**  | **Süreklilik**    | [Oto. Güncellemeler](updates.md)                  | Yazılımları (ve Kernel'i) güvenlik açıklarına karşı yamala.       |
-| **3**  | **Çekirdek**      | [Kernel (Sysctl)](sysctl.md)                      | Network stack (IPv6, ICMP, TCP) saldırılarını engelle.            |
-| **4**  | **Erişim**        | [SSH Hardening](ssh.md)                           | Portu değiştir, Root girişini kapat, Anahtar kullan.              |
-| **5**  | **Kimlik**        | [SSH 2FA](2fa.md)                                 | Anahtar çalınsa bile telefon onayı iste (Google Auth).            |
-| **6**  | **Duvar**         | [Firewall (UFW)](firewall.md)                     | Sadece gereken portları aç, **çıkış trafiğini (egress)** kısıtla. |
-| **7**  | **Aktif Koruma**  | [CrowdSec](crowdsec.md) / [Fail2ban](fail2ban.md) | Brute-force deneyenleri otomatik banla.                           |
-| **8**  | **Dosya Sistemi** | [Tmp Hardening](tmp-hardening.md)                 | `/tmp` klasöründe script çalıştırılmasını (`noexec`) engelle.     |
-| **9**  | **Bütünlük**      | [FIM (AIDE)](fim.md)                              | "Biri sistem dosyalarını değiştirdi mi?" kontrolü yap.            |
-| **10** | **Kısıtlama**     | [Derleyici Kısıtlama](compilers.md)               | Sunucuda `gcc`, `make` gibi derleyicileri yasakla.                |
-| **11** | **Kaynak**        | [Resource Limits](resource-limits.md)             | CPU/RAM limiti koy (Crypto Miner'ları boğ).                       |
-| **12** | **Sırlar**        | [Secret Yönetimi](secrets.md)                     | Şifreleri koda gömme; `.env`, Vault veya Docker Secrets kullan.   |
-| **13** | **Konteyner**     | [Docker Güvenliği](docker.md)                     | Non-root, Read-only FS, UserNS ile konteynerleri izole et.        |
-| **14** | **Gözetleme**     | [Monitoring](monitoring.md)                       | CPU, Disk, Ağ anomalileri için alarm kur.                         |
-| **15** | **Malware**       | [Antivirüs](malware.md)                           | ClamAV ve Rkhunter ile zararlı taraması yap.                      |
+Modern sunucu güvenliği, tek bir önleme değil, **birbirini tamamlayan çok katmanlı savunma** stratejisine dayanır. Bir katman aşılsa bile, diğer katmanlar saldırganı durdurur.
+
+### Temel Güvenlik Katmanları
+
+**Sistem Temeli:**  
+Güvenlik, temiz bir sistemle başlar. [Gereksiz servisleri temizleyerek](services.md) saldırı yüzeyini küçültün, [otomatik güncellemelerle](updates.md) yazılım açıklarını kapatın ve [kernel parametrelerini](sysctl.md) sıkılaştırarak network saldırılarını engelleyin.
+
+**Erişim Kontrolü:**  
+[SSH'ı sertleştirin](ssh.md) (port değiştirme, root girişi kapatma, anahtar kullanımı), [2FA ekleyin](2fa.md) ve [firewall kurallarıyla](firewall.md) sadece gerekli portları açın. [CrowdSec](crowdsec.md) veya [Fail2ban](fail2ban.md) ile brute-force saldırılarını otomatik engelleyin.
+
+**Dosya Sistemi ve Bütünlük:**  
+[/tmp dizinini sertleştirerek](tmp-hardening.md) zararlı script çalıştırılmasını önleyin, [AIDE ile dosya bütünlüğünü](fim.md) izleyin ve yetkisiz değişiklikleri tespit edin.
+
+**Kaynak ve Kısıtlamalar:**  
+[Derleyicileri kısıtlayarak](compilers.md) sunucuda zararlı yazılım derlenmesini engelleyin, [CPU/RAM limitleriyle](resource-limits.md) crypto miner gibi kaynak tüketen saldırıları boğun.
+
+**Uygulama Güvenliği:**  
+[Şifreleri güvenli yönetin](secrets.md) (`.env`, Vault, Docker Secrets), [Docker konteynerlerini](docker.md) izole edin (non-root, read-only FS, UserNS) ve [monitoring ile](monitoring.md) anomalileri tespit edin.
+
+**Malware Koruması:**  
+[ClamAV ve Rkhunter](malware.md) ile düzenli zararlı taraması yapın.
+
+### İleri Seviye Katmanlar
+
+Temel güvenlik sağlandıktan sonra, [Bastion Host](bastion.md) ile erişim noktalarını merkezileştirin, [Honeypot ve Tarpit](tarpit.md) ile saldırganları tuzağa düşürün, [OpenSCAP](compliance.md) ile uyumluluk standartlarını kontrol edin ve [SIEM/EDR](advanced-tools.md) araçlarıyla kurumsal düzeyde tehdit analizi yapın.
+
+Tüm katmanların etkinliğini düzenli olarak [Lynis](lynis.md) ile test edin.
 
 ---
 
