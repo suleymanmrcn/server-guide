@@ -1,0 +1,68 @@
+# Android Publishing Guide
+
+> [!NOTE]
+> Bu bölüm, React Native Android uygulamalarını Google Play Store ve alternatif platformlara yayınlama sürecini kapsar.
+
+## 📚 İçindekiler
+
+### [1. Keystore Temelleri](01-keystore-basics.md)
+
+- Keystore nedir?
+- Tek vs Çoklu keystore stratejisi
+- Keystore oluşturma
+- Güvenli saklama
+
+### [2. Gradle Konfigürasyonu](02-gradle-config.md)
+
+- Signing configs
+- ProGuard/R8 rules
+- Hibrit yaklaşım (Env Vars + gradle.properties)
+
+### [3. Build ve Release](03-build-release.md)
+
+- AAB vs APK
+- Release build alma
+- Alternatif dağıtım kanalları (F-Droid, GitHub Releases)
+- Dağıtım stratejisi
+
+### [4. Google Play Console](04-google-play.md)
+
+- App Signing by Google Play
+- Upload Key vs Signing Key
+- Version yönetimi
+- Store listing gereksinimleri
+- Data Safety formu
+
+### [5. Troubleshooting](05-troubleshooting.md)
+
+- Yaygın hatalar ve çözümler
+- İmza doğrulama
+- Assets/görseller sorunu
+- Hızlı referans
+
+### [6. Uygulama Satışı/Devir](06-app-transfer.md)
+
+- Keystore transferi
+- Google Play Console transfer
+- Yasal hususlar
+- Devir sonrası checklist
+
+---
+
+## 🚀 Hızlı Başlangıç
+
+**İlk kez yayınlıyorsanız:**
+
+1. [Keystore oluşturun](01-keystore-basics.md#keystore-oluşturma)
+2. [Gradle'ı yapılandırın](02-gradle-config.md#gradle-konfigürasyonu)
+3. [Release build alın](03-build-release.md#aab-oluşturma)
+4. [Google Play'e yükleyin](04-google-play.md#google-play-upload)
+
+**Sorun mu yaşıyorsunuz?**
+
+- [Troubleshooting](05-troubleshooting.md) bölümüne bakın
+- [Hızlı Referans](05-troubleshooting.md#hızlı-referans) kartını kullanın
+
+---
+
+> **💡 Pro Tip:** Her uygulama için ayrı keystore kullanın!
