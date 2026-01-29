@@ -1,13 +1,10 @@
->
-> - Google Play: AAB (zorunlu)
-> - Diğer her yer: APK
-> - Her ikisini de aynı keystore ile imzala!
+# Google Play Console
 
 ---
 
-## 6. APK/AAB Test Etme 🧪
+## APK/AAB Test Etme 🧪
 
-### 6.1. AAB'yi APK'ya Çevirme (Test İçin)
+### AAB'yi APK'ya Çevirme (Test İçin)
 
 ```bash
 # bundletool indir
@@ -26,7 +23,7 @@ unzip app-release.apks -d output
 adb install output/universal.apk
 ```
 
-### 6.2. İmza Doğrulama
+### İmza Doğrulama
 
 ```bash
 # APK imzasını kontrol et
@@ -38,23 +35,23 @@ keytool -printcert -jarfile app-release.apk
 
 ---
 
-## 7. Google Play Upload 🚀
+## Google Play Upload 🚀
 
-### 7.1. Play Console'da Uygulama Oluşturma
+### Play Console'da Uygulama Oluşturma
 
 1. [Google Play Console](https://play.google.com/console)'a girin
 2. "Create app" tıklayın
 3. Uygulama bilgilerini doldurun
 4. "Create app" tıklayın
 
-### 7.2. AAB Upload
+### AAB Upload
 
 1. **Production** > **Releases** > **Create new release**
 2. AAB dosyasını upload edin
 3. Release notes ekleyin
 4. **Review release** > **Start rollout to production**
 
-### 7.3. App Signing by Google Play (Önerilen)
+### App Signing by Google Play (Önerilen)
 
 > [!CAUTION]
 > **ZORUNLU HALE GELİYOR (2025):**
@@ -112,7 +109,7 @@ keytool -printcert -jarfile app-release.apk
 >
 > 4. `encrypted_private_key.zip`'i upload et
 
-### 7.4. APK İmza Şemaları (V1/V2/V3)
+### APK İmza Şemaları (V1/V2/V3)
 
 **İmza Şemaları:**
 
@@ -151,9 +148,9 @@ android {
 
 ---
 
-## 8. Version Yönetimi 📈
+## Version Yönetimi 📈
 
-### 8.1. android/app/build.gradle
+### android/app/build.gradle
 
 ```gradle
 android {
@@ -180,7 +177,7 @@ android {
 >
 > Eski targetSdk ile uygulama güncellenemez!
 
-### 8.2. Version Artırma Stratejisi
+### Version Artırma Stratejisi
 
 ```
 versionCode: 1, 2, 3, 4, ... (her release'de +1)
@@ -195,9 +192,9 @@ versionName: "1.0.0", "1.0.1", "1.1.0", "2.0.0" (semantic versioning)
 
 ---
 
-## 9. CI/CD Entegrasyonu 🔄
+## CI/CD Entegrasyonu 🔄
 
-### 9.1. GitHub Actions Örneği
+### GitHub Actions Örneği
 
 ```yaml
 # .github/workflows/android-release.yml
@@ -252,7 +249,7 @@ jobs:
           path: android/app/build/outputs/bundle/release/app-release.aab
 ```
 
-### 9.2. GitHub Secrets Ekleme
+### GitHub Secrets Ekleme
 
 ```bash
 # Keystore'u base64'e çevir
@@ -267,9 +264,9 @@ base64 -i android/app/my-upload-key.keystore | pbcopy
 
 ---
 
-## 10. Troubleshooting 🔍
+## Troubleshooting 🔍
 
-### 10.1. Yaygın Hatalar
+### Yaygın Hatalar
 
 **Hata: "Failed to read key"**
 

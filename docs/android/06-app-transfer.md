@@ -1,3 +1,5 @@
+# Uygulama Satışı ve Devir
+
 
 **Boyut Analizi:**
 
@@ -10,7 +12,7 @@ bundletool get-size total \
 ls -lh android/app/build/outputs/apk/release/app-release.apk
 ```
 
-### 13.5. Keystore Kaybı Durumunda
+### Keystore Kaybı Durumunda
 
 **Eğer keystore'u kaybettiyseniz:**
 
@@ -27,7 +29,7 @@ ls -lh android/app/build/outputs/apk/release/app-release.apk
 > [!CAUTION]
 > **Bu yüzden Google Play App Signing MUTLAKA aktif olmalı!**
 
-### 13.6. Store Listing Gereksinimleri
+### Store Listing Gereksinimleri
 
 **Minimum Gereksinimler:**
 
@@ -50,7 +52,7 @@ ls -lh android/app/build/outputs/apk/release/app-release.apk
 - Yaş sınırı belirlenir
 - Tüm ülkeler için geçerli
 
-### 13.7. Data Safety Form (ZORUNLU!)
+### Data Safety Form (ZORUNLU!)
 
 > [!CAUTION]
 > **Google Play Console'da "Data Safety" formu doldurulmadan release oluşturamazsınız!**
@@ -66,7 +68,7 @@ ls -lh android/app/build/outputs/apk/release/app-release.apk
 - AdMob: **Evet, reklam ID topluyoruz**
 - Crash reporting: **Evet, crash logs topluyoruz**
 
-### 13.8. API 33+ Yeni Gereksinimler (Android 13+)
+### API 33+ Yeni Gereksinimler (Android 13+)
 
 > [!IMPORTANT]
 > **targetSdkVersion 33+** kullanıyorsanız yeni zorunluluklar var!
@@ -111,9 +113,9 @@ async function requestNotificationPermission() {
 
 ---
 
-## 14. Ek Troubleshooting 🔧
+## Ek Troubleshooting 🔧
 
-### 14.1. Assets/Görseller Görünmüyor
+### Assets/Görseller Görünmüyor
 
 **Sorun:** Release APK'da görseller veya fontlar yüklenmiyor.
 
@@ -132,7 +134,7 @@ npx react-native bundle \
 cd android && ./gradlew assembleRelease
 ```
 
-### 14.2. INSTALL_FAILED_UPDATE_INCOMPATIBLE
+### INSTALL_FAILED_UPDATE_INCOMPATIBLE
 
 **Sorun:** Farklı imza ile imzalanmış eski uygulama yüklü.
 
@@ -146,7 +148,7 @@ adb uninstall com.yourapp
 adb install android/app/build/outputs/apk/release/app-release.apk
 ```
 
-### 14.3. Execution failed for task ':app:validateSigningRelease'
+### Execution failed for task ':app:validateSigningRelease'
 
 **Sorun:** Keystore bulunamıyor veya şifre yanlış.
 
@@ -173,7 +175,7 @@ MYAPP_UPLOAD_STORE_FILE=my-upload-key.keystore
 MYAPP_UPLOAD_STORE_FILE=android/app/my-upload-key.keystore
 ```
 
-### 14.4. INSTALL_PARSE_FAILED_NO_CERTIFICATES
+### INSTALL_PARSE_FAILED_NO_CERTIFICATES
 
 **Sorun:** APK imzalanmamış.
 
@@ -185,10 +187,3 @@ apksigner verify --verbose app-release.apk
 
 ---
 
-## 15. Hızlı Referans 🚀
-
-| Komut                                   | Açıklama         |
-| --------------------------------------- | ---------------- |
-| `./gradlew bundleRelease`               | AAB oluştur      |
-| `./gradlew assembleRelease`             | APK oluştur      |
-| `./gradlew clean`                       | Cache temizle    |

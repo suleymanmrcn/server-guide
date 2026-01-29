@@ -1,8 +1,10 @@
+# Build ve Release
+
 # Çıktı:
 # android/app/build/outputs/bundle/release/app-release.aab
 ```
 
-### 5.2. APK (Alternative)
+### APK (Alternative)
 
 ```bash
 # Release APK oluştur
@@ -12,7 +14,7 @@
 # android/app/build/outputs/apk/release/app-release.apk
 ```
 
-### 5.3. Build Temizleme
+### Build Temizleme
 
 ```bash
 # Cache temizle
@@ -24,7 +26,7 @@
 
 ---
 
-### 5.4. AAB vs APK: Hangisini Kullanmalı? 🤔
+### AAB vs APK: Hangisini Kullanmalı? 🤔
 
 > [!IMPORTANT]
 > **Google Play:** AAB **zorunlu** (2021'den beri)  
@@ -57,7 +59,7 @@
 
 ---
 
-### 5.5. Alternatif Dağıtım Kanalları (APK)
+### Alternatif Dağıtım Kanalları (APK)
 
 #### 1. F-Droid (Açık Kaynak Uygulamalar)
 
@@ -202,7 +204,7 @@ https://github.com/yourname/yourapp/releases/latest
 
 ---
 
-### 5.6. Dağıtım Stratejisi Önerisi
+### Dağıtım Stratejisi Önerisi
 
 **Çoklu Platform Stratejisi:**
 

@@ -1,22 +1,8 @@
-```bash
-# Çözüm: Şifreleri kontrol edin
-keytool -list -v -keystore my-upload-key.keystore
+# Troubleshooting ve Checklist
+
 ```
 
-**Hata: "Keystore was tampered with"**
-
-```bash
-# Çözüm: Keystore bozulmuş, yedekten geri yükleyin
-```
-
-**Hata: "Upload key not found"**
-
-```bash
-# Çözüm: gradle.properties dosyasını kontrol edin
-cat android/gradle.properties
-```
-
-### 10.2. Keystore Bilgilerini Görüntüleme
+### Keystore Bilgilerini Görüntüleme
 
 ```bash
 # Keystore içeriğini listele
@@ -31,7 +17,7 @@ keytool -list -v -keystore my-upload-key.keystore -alias my-key-alias
 
 ---
 
-## 11. Checklist: Production Release 📋
+## Checklist: Production Release 📋
 
 - [ ] Keystore oluşturuldu ve güvenli yerde saklandı
 - [ ] Keystore şifreleri kaydedildi (password manager)
@@ -50,7 +36,7 @@ keytool -list -v -keystore my-upload-key.keystore -alias my-key-alias
 
 ---
 
-## 12. Güvenlik Best Practices 🔐
+## Güvenlik Best Practices 🔐
 
 1. **Keystore Güvenliği:**
    - Asla Git'e commit etmeyin
@@ -74,9 +60,9 @@ keytool -list -v -keystore my-upload-key.keystore -alias my-key-alias
 
 ---
 
-## 13. Eksik Kritik Konular ⚠️
+## Eksik Kritik Konular ⚠️
 
-### 13.1. SHA-256 Fingerprint (Firebase/Google Services İçin)
+### SHA-256 Fingerprint (Firebase/Google Services İçin)
 
 Firebase, Google Sign-In, Google Maps kullanıyorsanız **mutlaka** gerekli:
 
@@ -104,7 +90,7 @@ keytool -list -v -keystore android/app/my-upload-key.keystore -alias my-key-alia
 >
 > **Her ikisini de** Firebase'e eklemelisiniz!
 
-### 13.2. 64-bit Gereksinimi (2019'dan beri zorunlu)
+### 64-bit Gereksinimi (2019'dan beri zorunlu)
 
 Google Play, 64-bit desteği **zorunlu** kılmıştır:
 
@@ -143,7 +129,7 @@ unzip -l android/app/build/outputs/bundle/release/app-release.aab | grep "lib/"
 # lib/armeabi-v7a/  ← 32-bit ARM
 ```
 
-### 13.3. Internal Testing Track (İlk Upload İçin)
+### Internal Testing Track (İlk Upload İçin)
 
 **Production'a direkt yükleme yapmamalısınız!**
 
@@ -171,7 +157,7 @@ Play Console → Testing → Internal testing
 https://play.google.com/apps/internaltest/XXXXXXXX
 ```
 
-### 13.4. App Size Optimization
+### App Size Optimization
 
 **AAB Boyutunu Küçültme:**
 
@@ -208,3 +194,10 @@ project.ext.react = [
     enableHermes: true  // Varsayılan olarak true
 ]
 ```
+## Hızlı Referans 🚀
+
+| Komut                                   | Açıklama         |
+| --------------------------------------- | ---------------- |
+| `./gradlew bundleRelease`               | AAB oluştur      |
+| `./gradlew assembleRelease`             | APK oluştur      |
+| `./gradlew clean`                       | Cache temizle    |

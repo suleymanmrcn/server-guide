@@ -1,5 +1,7 @@
+# Gradle Konfigürasyonu
 
-### 4.1. android/app/build.gradle (Hibrit Yaklaşım)
+
+### android/app/build.gradle (Hibrit Yaklaşım)
 
 ```gradle
 android {
@@ -54,7 +56,7 @@ android {
 > - CI/CD: Environment variables kullanır (daha güvenli)
 > - `gradle.properties` dosyası oluşturmaya gerek kalmaz
 
-### 4.2. ProGuard/R8 Rules (Detaylı)
+### ProGuard/R8 Rules (Detaylı)
 
 ```proguard
 # android/app/proguard-rules.pro
@@ -107,9 +109,9 @@ android {
 
 ---
 
-## 5. Release APK/AAB Oluşturma 📦
+## Release APK/AAB Oluşturma 📦
 
-### 5.1. AAB (Android App Bundle) - Önerilen
+### AAB (Android App Bundle) - Önerilen
 
 ```bash
 # Proje root dizininde

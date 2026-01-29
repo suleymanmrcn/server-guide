@@ -1,3 +1,5 @@
+# Keystore Temelleri
+
 # Android Keystore ve APK İmzalama Rehberi
 
 > [!WARNING]
@@ -9,7 +11,7 @@ React Native Android uygulamanızı Google Play Store'a yüklemek için APK/AAB 
 
 ---
 
-## 1. Keystore Nedir? 🔑
+## Keystore Nedir? 🔑
 
 **Keystore**, Android uygulamanızı imzalamak için kullanılan dijital sertifika deposudur.
 
@@ -20,7 +22,7 @@ React Native Android uygulamanızı Google Play Store'a yüklemek için APK/AAB 
 - Google Play, aynı keystore ile imzalanmış APK'ları aynı uygulama olarak tanır
 - Keystore şifresini **unutmayın** - kurtarma yolu yoktur!
 
-### 1.1. Tek Keystore vs Çoklu Keystore (Çok Önemli!) 🎯
+### Tek Keystore vs Çoklu Keystore (Çok Önemli!) 🎯
 
 > [!CAUTION]
 > **Birden fazla uygulama geliştiriyorsanız:**
@@ -73,16 +75,16 @@ fitness-app-upload-key.keystore
 
 ---
 
-## 2. Keystore Oluşturma 🛠️
+## Keystore Oluşturma 🛠️
 
-### 2.1. Gereksinimler
+### Gereksinimler
 
 ```bash
 # Java JDK kurulu olmalı (React Native sürümünüze uygun)
 java -version
 
-# keytool komutu JDK ile gelir
-keytool -version
+# keytool komutu JDK ile gelir, yardımı görerek kontrol edebilirsiniz
+keytool -help
 ```
 
 > [!IMPORTANT]
@@ -94,7 +96,7 @@ keytool -version
 >
 > Yanlış JDK sürümü build hatalarına neden olur!
 
-### 2.2. Keystore Oluşturma Komutu
+### Keystore Oluşturma Komutu
 
 ```bash
 # Proje root dizininde
@@ -126,7 +128,7 @@ keytool -genkeypair -v \
 > Google Play, sertifikanın **en az 22 Ekim 2033** tarihine kadar geçerli olmasını şart koşar.
 > 10000 günden (27 yıl) az verilirse ileride güncelleme sorunu yaşanabilir!
 
-### 2.3. İstenecek Bilgiler
+### İstenecek Bilgiler
 
 ```
 Enter keystore password: ********
@@ -168,9 +170,9 @@ Enter key password for <my-key-alias>
 
 ---
 
-## 3. Keystore'u Güvenli Saklama 🔒
+## Keystore'u Güvenli Saklama 🔒
 
-### 3.1. .gitignore'a Ekleyin
+### .gitignore'a Ekleyin
 
 ```bash
 # android/app/.gitignore
@@ -178,7 +180,7 @@ Enter key password for <my-key-alias>
 *.jks
 ```
 
-### 3.2. Yedekleme
+### Yedekleme
 
 ```bash
 # Keystore'u güvenli bir yere yedekleyin
@@ -190,7 +192,7 @@ Enter key password for <my-key-alias>
 # - Password manager
 ```
 
-### 3.3. Keystore Bilgilerini Saklama
+### Keystore Bilgilerini Saklama
 
 **gradle.properties (local):**
 
@@ -207,4 +209,4 @@ MYAPP_UPLOAD_KEY_PASSWORD=your_key_password
 
 ---
 
-## 4. Gradle Konfigürasyonu ⚙️
+## Gradle Konfigürasyonu ⚙️
